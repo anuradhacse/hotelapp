@@ -109,11 +109,13 @@ class HotelBookingApp {
   }
 
   private void addBooking() {
+    //check if the given guest exists
     checkGuestAvailability();
 
     String numberOfGuests;
     Integer roomCapacity;
 
+    //check if given room exists and validate the room capacity against the number of guests
     do {
       String roomNumber = checkRoomAvailability();
       Room room = getRoomByRoomNumber(roomNumber);
@@ -127,6 +129,13 @@ class HotelBookingApp {
       }
 
     } while (Integer.valueOf(numberOfGuests) > roomCapacity);
+
+
+    String checkingMonth;
+    do {
+      System.out.println("Please enter check-in month:");
+      checkingMonth  = scanner.nextLine();
+    }while(isInvalidMonth(checkingMonth));
 
   }
 
@@ -186,5 +195,13 @@ class HotelBookingApp {
       }
     }
     return null;
+  }
+
+  private boolean isInvalidMonth(String checkingMonth) {
+    if (0 >= Integer.valueOf(checkingMonth) || Integer.valueOf(checkingMonth) >= 13) {
+      System.out.print("Invalid month.");
+      return true;
+    }
+    return false;
   }
 }
