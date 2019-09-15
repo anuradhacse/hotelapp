@@ -130,12 +130,29 @@ class HotelBookingApp {
 
     } while (Integer.valueOf(numberOfGuests) > roomCapacity);
 
-
     String checkingMonth;
     do {
       System.out.println("Please enter check-in month:");
-      checkingMonth  = scanner.nextLine();
-    }while(isInvalidMonth(checkingMonth));
+      checkingMonth = scanner.nextLine();
+    } while (isInvalidMonth(checkingMonth));
+
+    String checkingDay;
+    do {
+      System.out.println("Please enter check-in day:");
+      checkingDay = scanner.nextLine();
+    } while (isInvalidDay(checkingDay));
+
+    String checkoutMonth;
+    do {
+      System.out.println("Please enter check-out month:");
+      checkoutMonth = scanner.nextLine();
+    } while (isInvalidMonth(checkoutMonth));
+
+    String checkoutDay;
+    do {
+      System.out.println("Please enter check-out day:");
+      checkoutDay = scanner.nextLine();
+    } while (isInvalidDay(checkoutDay));
 
   }
 
@@ -204,4 +221,31 @@ class HotelBookingApp {
     }
     return false;
   }
+
+  private boolean isInvalidDay(String checkingDay) {
+    if (0 >= Integer.valueOf(checkingDay) || Integer.valueOf(checkingDay) >= 32) {
+      System.out.print("Invalid day.");
+      return true;
+    }
+    return false;
+  }
+
+  private int dateToDayNumber(int month, int day) {
+  // Catch invalid input and return early
+    if (month < 1 || month > 12 || day < 1 || day > 31) return 0;
+    if (month == 1 ) return day;
+    if (month == 2 ) return 31 + day;
+    if (month == 3 ) return 59 + day;
+    if (month == 4 ) return 90 + day;
+    if (month == 5 ) return 120 + day;
+    if (month == 6 ) return 151 + day;
+    if (month == 7 ) return 181 + day;
+    if (month == 8 ) return 212 + day;
+    if (month == 9 ) return 243 + day;
+    if (month == 10) return 273 + day;
+    if (month == 11) return 304 + day;
+
+    return 334 + day;
+  }
+
 }
