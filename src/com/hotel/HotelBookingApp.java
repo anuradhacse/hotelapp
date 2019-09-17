@@ -109,6 +109,17 @@ class HotelBookingApp {
   }
 
   private void addBooking() {
+    while (true) {
+      getBookingDetails();
+      System.out.println("Would you like to [A]dd a new booking or [R]eturn to the previous menu?");
+      String response = scanner.nextLine();
+      if (response.equals("R")) {
+        break;
+      }
+    }
+  }
+
+  private void getBookingDetails() {
     //check if the given guest exists
     checkGuestAvailability();
 
@@ -153,6 +164,8 @@ class HotelBookingApp {
       System.out.println("Please enter check-out day:");
       checkoutDay = scanner.nextLine();
     } while (isInvalidDay(checkoutDay));
+
+    System.out.println("*** Booking successful! ***");
 
   }
 
