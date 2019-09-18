@@ -20,7 +20,8 @@ class HotelBookingApp {
   }
 
   void startApplication() {
-
+    //todo number string validation, if user input strings instead of numbers handle that
+    //todo roombooking
     System.out.print("-----------------------------------------------\n"
         + "------ Welcome to FedUni Hotel Bookings -------\n"
         + "-----------------------------------------------\n"
@@ -141,31 +142,43 @@ class HotelBookingApp {
 
     } while (Integer.valueOf(numberOfGuests) > roomCapacity);
 
-    String checkingMonth;
+    int checkinDay;
+    int checkoutDay;
     do {
-      System.out.println("Please enter check-in month:");
-      checkingMonth = scanner.nextLine();
-    } while (isInvalidMonth(checkingMonth));
+      String checkinMonth;
+      do {
+        System.out.println("Please enter check-in month:");
+        checkinMonth = scanner.nextLine();
+      } while (isInvalidMonth(checkinMonth));
 
-    String checkingDay;
-    do {
-      System.out.println("Please enter check-in day:");
-      checkingDay = scanner.nextLine();
-    } while (isInvalidDay(checkingDay));
+      String checkinDate;
+      do {
+        System.out.println("Please enter check-in day:");
+        checkinDate = scanner.nextLine();
+      } while (isInvalidDay(checkinDate));
 
-    String checkoutMonth;
-    do {
-      System.out.println("Please enter check-out month:");
-      checkoutMonth = scanner.nextLine();
-    } while (isInvalidMonth(checkoutMonth));
+      String checkoutMonth;
+      do {
+        System.out.println("Please enter check-out month:");
+        checkoutMonth = scanner.nextLine();
+      } while (isInvalidMonth(checkoutMonth));
 
-    String checkoutDay;
-    do {
-      System.out.println("Please enter check-out day:");
-      checkoutDay = scanner.nextLine();
-    } while (isInvalidDay(checkoutDay));
+      String checkoutDate;
+      do {
+        System.out.println("Please enter check-out day:");
+        checkoutDate = scanner.nextLine();
+      } while (isInvalidDay(checkoutDate));
 
-    System.out.println("*** Booking successful! ***");
+      checkinDay = dateToDayNumber(Integer.valueOf(checkinMonth), Integer.valueOf(checkinDate));
+      checkoutDay = dateToDayNumber(Integer.valueOf(checkoutMonth), Integer.valueOf(checkoutDate));
+
+      if (checkinDay > checkoutDay) {
+        System.out.println("Check-out Date should be a Date After Check-in Date");
+      } else {
+        System.out.println("*** Booking successful! ***");
+        break;
+      }
+    } while (checkinDay > checkoutDay);
 
   }
 
