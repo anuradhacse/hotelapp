@@ -16,7 +16,7 @@ class HotelBookingApp {
     guests.add(new Guest("anu", 1));
     guests.add(new Guest("jay", 2));
     rooms.add(new Room(1, 2));
-    rooms.add(new Room(2, 3));
+    rooms.add(new Room(2, 7));
   }
 
   void startApplication() {
@@ -126,11 +126,12 @@ class HotelBookingApp {
 
     String numberOfGuests;
     Integer roomCapacity;
+    Room room;
 
     //check if given room exists and validate the room capacity against the number of guests
     do {
       String roomNumber = checkRoomAvailability();
-      Room room = getRoomByRoomNumber(roomNumber);
+      room = getRoomByRoomNumber(roomNumber);
       roomCapacity = room.getRoomCapacity();
 
       System.out.println("Please enter number of guests:");
@@ -175,11 +176,21 @@ class HotelBookingApp {
       if (checkinDay > checkoutDay) {
         System.out.println("Check-out Date should be a Date After Check-in Date");
       } else {
-        System.out.println("*** Booking successful! ***");
-        break;
+
+        while(Integer.valueOf(numberOfGuests) > roomCapacity || !room.setBooked(checkinDay, checkoutDay)){
+
+          String roomNumber = checkRoomAvailability();
+          room = getRoomByRoomNumber(roomNumber);
+          roomCapacity = room.getRoomCapacity();
+
+          if (Integer.valueOf(numberOfGuests) > roomCapacity) {
+            System.out.println("Guest count exceeds room capacity of: " + roomCapacity);
+          }
+        }
       }
     } while (checkinDay > checkoutDay);
 
+    System.out.println("*** Booking successful! ***");
   }
 
   private String checkGuestAvailability() {
