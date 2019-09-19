@@ -222,8 +222,11 @@ class HotelBookingApp {
 
     for(Booking booking: bookings){
       Guest guest = booking.getGuest();
+      Room room = booking.getRoom();
       if(guestId.equals(Integer.toString(guest.getId()))){
         System.out.println("Guest " + guestId + " : " + guest.getName());
+        System.out.println("Booking : Room " + room.getRoomNumber() + ", " + booking.getNumberOfGuests() + " guest(s) from "
+            + getCheckingDate(booking.getCheckinDay()) + " to " + getCheckoutDate(booking.getCheckoutDay()));
       }
     }
 
@@ -332,6 +335,54 @@ class HotelBookingApp {
     if (month == 11) return 304 + day;
 
     return 334 + day;
+  }
+
+  private int dayNumberToMonth(int dayNumber) {
+// Catch invalid input and return early
+    if (dayNumber < 1 || dayNumber > 365) return 0;
+    if (dayNumber <= 31 ) return 1; // Jan
+    if (dayNumber <= 59 ) return 2; // Feb
+    if (dayNumber <= 90 ) return 3; // Mar
+    if (dayNumber <= 120) return 4; // Apr
+    if (dayNumber <= 151) return 5; // May
+    if (dayNumber <= 181) return 6; // Jun
+    if (dayNumber <= 212) return 7; // Jul
+    if (dayNumber <= 243) return 8; // Aug
+    if (dayNumber <= 273) return 9; // Sep
+    if (dayNumber <= 304) return 10; // Oct
+    if (dayNumber <= 334) return 11; // Nov
+    return 12; // Dec
+  }
+
+  private int dayNumberToDayOfMonth(int dayNumber) {
+// Catch invalid input and return early
+    if (dayNumber < 1 || dayNumber > 365) return 0;
+    if (dayNumber <= 31 ) return dayNumber; // Jan
+    if (dayNumber <= 59 ) return dayNumber - 31; // Feb
+    if (dayNumber <= 90 ) return dayNumber - 59; // Mar
+    if (dayNumber <= 120) return dayNumber - 90; // Apr
+    if (dayNumber <= 151) return dayNumber - 120; // May
+    if (dayNumber <= 181) return dayNumber - 151; // Jun
+    if (dayNumber <= 212) return dayNumber - 181; // Jul
+    if (dayNumber <= 243) return dayNumber - 212; // Aug
+    if (dayNumber <= 273) return dayNumber - 243; // Sep
+    if (dayNumber <= 304) return dayNumber - 273; // Oct
+    if (dayNumber <= 334) return dayNumber - 304; // Nov
+    return dayNumber - 334; // Dec
+  }
+
+  private String getCheckingDate(int checkingDay){
+    int checkingMonth = dayNumberToMonth(checkingDay);
+    int checkingDate = dayNumberToDayOfMonth(checkingDay);
+
+    return String.valueOf(checkingMonth)+"/"+String.valueOf(checkingDate);
+  }
+
+  private String getCheckoutDate(int checkoutDay){
+    int checkoutMonth = dayNumberToMonth(checkoutDay);
+    int checkoutDate = dayNumberToDayOfMonth(checkoutDay);
+
+    return String.valueOf(checkoutMonth)+"/"+String.valueOf(checkoutDate);
   }
 
 }
