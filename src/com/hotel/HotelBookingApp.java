@@ -27,30 +27,41 @@ class HotelBookingApp {
 
   void startApplication() {
     //todo number string validation, if user input strings instead of numbers handle that
-    //todo roombooking
-    System.out.print("-----------------------------------------------\n"
-        + "------ Welcome to FedUni Hotel Bookings -------\n"
-        + "-----------------------------------------------\n"
-        + "Main Menu - please select an option:\n"
-        + "1.) Add guest\n"
-        + "2.) Add room\n"
-        + "3.) Add booking\n"
-        + "4.) View bookings\n"
-        + "5.) Quit\n");
 
     //reading the input using Scanner class in java
-    String mainMenuInput = scanner.nextLine();
+    while(true){
+      System.out.print("-----------------------------------------------\n"
+          + "------ Welcome to FedUni Hotel Bookings -------\n"
+          + "-----------------------------------------------\n"
+          + "Main Menu - please select an option:\n"
+          + "1.) Add guest\n"
+          + "2.) Add room\n"
+          + "3.) Add booking\n"
+          + "4.) View bookings\n"
+          + "5.) Quit\n");
 
-    switch (mainMenuInput) {
-      case "1":
-        createGuest();
-      case "2":
-        addRoom();
-      case "3":
-        addBooking();
-      case "4":
-        viewBooking();
+      String mainMenuInput = scanner.nextLine();
+      switch (mainMenuInput) {
+        case "1":
+          createGuest();
+          break;
+        case "2":
+          addRoom();
+          break;
+        case "3":
+          addBooking();
+          break;
+        case "4":
+          viewBooking();
+          break;
+        case "5":
+          quit();
+        default:
+          System.out.println("Invalid input, Please input the options shown in the list");
+          break;
+      }
     }
+
   }
 
   private void createGuest() {
@@ -203,18 +214,23 @@ class HotelBookingApp {
   }
 
   private void viewBooking(){
-    System.out.println("Would you like to view [G]uest bookings, [R]oom booking, or e[X]it?");
-    String response = scanner.nextLine();
-    if(response.equals("G")){
-      viewGuestBookings();
-    }else if(response.equals("R")){
-      viewRoomBookings();
-    }else if(response.equals("X")){
-      System.exit(0);
-    }else {
-      System.out.println("Invalid input, Hence exiting");
-      System.exit(0);
+    while(true){
+      System.out.println("Would you like to view [G]uest bookings, [R]oom booking, or e[X]it?");
+      String response = scanner.nextLine();
+      if(response.equals("G")){
+        viewGuestBookings();
+      }else if(response.equals("R")){
+        viewRoomBookings();
+      }else if(response.equals("X")){
+        break;
+      }
     }
+
+  }
+
+  private void quit(){
+    System.out.println("Thanks for using FedUni Hotel Bookings!");
+    System.exit(0);
   }
 
   private void viewGuestBookings(){
@@ -223,8 +239,8 @@ class HotelBookingApp {
     for(Booking booking: bookings){
       Guest guest = booking.getGuest();
       Room room = booking.getRoom();
+      System.out.println("Guest " + guestId + " : " + guest.getName());
       if(guestId.equals(Integer.toString(guest.getId()))){
-        System.out.println("Guest " + guestId + " : " + guest.getName());
         System.out.println("Booking : Room " + room.getRoomNumber() + ", " + booking.getNumberOfGuests() + " guest(s) from "
             + getCheckingDate(booking.getCheckinDay()) + " to " + getCheckoutDate(booking.getCheckoutDay()));
       }
@@ -237,8 +253,8 @@ class HotelBookingApp {
     for(Booking booking: bookings){
       Guest guest = booking.getGuest();
       Room room = booking.getRoom();
+      System.out.println("Room " + Integer.toString(room.getRoomNumber()) + " bookings: ");
       if(roomNumber.equals(Integer.toString(room.getRoomNumber()))){
-        System.out.println("Room " + Integer.toString(room.getRoomNumber()) + " bookings: ");
         System.out.println("Guest " +guest.getId() + " – " + guest.getName() +", " + booking.getNumberOfGuests()
             + " guest(s) from " + getCheckingDate(booking.getCheckinDay()) + " to " +
             getCheckoutDate(booking.getCheckoutDay()) + ".");
