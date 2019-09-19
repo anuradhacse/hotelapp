@@ -233,6 +233,18 @@ class HotelBookingApp {
   }
 
   private void viewRoomBookings(){
+    String roomNumber = checkRoomAvailability();
+    for(Booking booking: bookings){
+      Guest guest = booking.getGuest();
+      Room room = booking.getRoom();
+      if(roomNumber.equals(Integer.toString(room.getRoomNumber()))){
+        System.out.println("Room " + Integer.toString(room.getRoomNumber()) + " bookings: ");
+        System.out.println("Guest " +guest.getId() + " – " + guest.getName() +", " + booking.getNumberOfGuests()
+            + " guest(s) from " + getCheckingDate(booking.getCheckinDay()) + " to " +
+            getCheckoutDate(booking.getCheckoutDay()) + ".");
+      }
+
+    }
 
   }
 
@@ -375,14 +387,14 @@ class HotelBookingApp {
     int checkingMonth = dayNumberToMonth(checkingDay);
     int checkingDate = dayNumberToDayOfMonth(checkingDay);
 
-    return String.valueOf(checkingMonth)+"/"+String.valueOf(checkingDate);
+    return String.valueOf(checkingMonth)+"/"+ String.valueOf(checkingDate);
   }
 
   private String getCheckoutDate(int checkoutDay){
     int checkoutMonth = dayNumberToMonth(checkoutDay);
     int checkoutDate = dayNumberToDayOfMonth(checkoutDay);
 
-    return String.valueOf(checkoutMonth)+"/"+String.valueOf(checkoutDate);
+    return String.valueOf(checkoutMonth)+"/"+ String.valueOf(checkoutDate);
   }
 
 }
