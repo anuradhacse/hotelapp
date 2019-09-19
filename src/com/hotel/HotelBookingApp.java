@@ -10,13 +10,19 @@ class HotelBookingApp {
   private static Integer guestId = 1;
   private static List<Guest> guests = new ArrayList<>();
   private static List<Room> rooms = new ArrayList<>();
-
+  private static List<Booking> bookings = new ArrayList<>();
 
   HotelBookingApp(){
-    guests.add(new Guest("anu", 1));
-    guests.add(new Guest("jay", 2));
-    rooms.add(new Room(1, 2));
-    rooms.add(new Room(2, 7));
+    Guest guest1 = new Guest("anu", 1);
+    Guest guest2 =  new Guest("jay", 2);
+    Room room1 = new Room(1, 2);
+    Room room2 = new Room(2, 7);
+
+    guests.add(guest1);
+    guests.add(guest2);
+    rooms.add(room1);
+    rooms.add(room2);
+    bookings.add(new Booking(guest1, room1,"2", 12, 18));
   }
 
   void startApplication() {
@@ -42,6 +48,8 @@ class HotelBookingApp {
         addRoom();
       case "3":
         addBooking();
+      case "4":
+        viewBooking();
     }
   }
 
@@ -122,7 +130,7 @@ class HotelBookingApp {
 
   private void getBookingDetails() {
     //check if the given guest exists
-    checkGuestAvailability();
+    String guestId = checkGuestAvailability();
 
     String numberOfGuests;
     Integer roomCapacity;
@@ -190,7 +198,39 @@ class HotelBookingApp {
       }
     } while (checkinDay > checkoutDay);
 
+    bookings.add(new Booking(getGuestByGuestId(guestId), room, numberOfGuests, checkinDay, checkoutDay));
     System.out.println("*** Booking successful! ***");
+  }
+
+  private void viewBooking(){
+    System.out.println("Would you like to view [G]uest bookings, [R]oom booking, or e[X]it?");
+    String response = scanner.nextLine();
+    if(response.equals("G")){
+      viewGuestBookings();
+    }else if(response.equals("R")){
+      viewRoomBookings();
+    }else if(response.equals("X")){
+      System.exit(0);
+    }else {
+      System.out.println("Invalid input, Hence exiting");
+      System.exit(0);
+    }
+  }
+
+  private void viewGuestBookings(){
+    String guestId = checkGuestAvailability();
+
+    for(Booking booking: bookings){
+      Guest guest = booking.getGuest();
+      if(guestId.equals(Integer.toString(guest.getId()))){
+        System.out.println("Guest " + guestId + " : " + guest.getName());
+      }
+    }
+
+  }
+
+  private void viewRoomBookings(){
+
   }
 
   private String checkGuestAvailability() {
@@ -246,6 +286,15 @@ class HotelBookingApp {
     for(Room room: rooms){
       if(roomNumber.equals(room.getRoomNumber().toString())){
         return room;
+      }
+    }
+    return null;
+  }
+
+  public Guest getGuestByGuestId(String guestId){
+    for(Guest guest: guests){
+      if(guestId.equals(guest.getId().toString())){
+        return guest;
       }
     }
     return null;
