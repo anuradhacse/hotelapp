@@ -23,10 +23,12 @@ class HotelBookingApp {
     rooms.add(room1);
     rooms.add(room2);
     bookings.add(new Booking(guest1, room1,"2", 12, 18));
+    bookings.add(new Booking(guest1, room2,"3", 13, 14));
+    bookings.add(new Booking(guest2, room1,"2", 34, 56));
+    bookings.add(new Booking(guest2, room2,"3", 54, 56));
   }
 
   void startApplication() {
-    //todo number string validation, if user input strings instead of numbers handle that
 
     //reading the input using Scanner class in java
     while(true){
@@ -104,17 +106,25 @@ class HotelBookingApp {
         System.out.println("Please enter room number:");
         roomNumber = scanner.nextLine();
 
-        for (Room room : rooms) {
-          if (room.getRoomNumber().equals(Integer.valueOf(roomNumber))) {
-            System.out.print("Room already exists. ");
-            roomExistsWithGivenRoomNumber = true;
+        if (checkValidIntegerInput(roomNumber)) {
+          for (Room room : rooms) {
+            if (room.getRoomNumber().equals(Integer.valueOf(roomNumber))) {
+              System.out.print("Room already exists. ");
+              roomExistsWithGivenRoomNumber = true;
+            }
           }
+        } else {
+          roomExistsWithGivenRoomNumber = true;
         }
 
       } while (roomExistsWithGivenRoomNumber);
 
-      System.out.println("Please enter room capacity:");
-      String roomCapacity = scanner.nextLine();
+      String roomCapacity;
+
+      do{
+        System.out.println("Please enter room capacity:");
+        roomCapacity = scanner.nextLine();
+      }while (!checkValidIntegerInput(roomCapacity));
 
       rooms.add(new Room(Integer.valueOf(roomNumber), Integer.valueOf(roomCapacity)));
 
@@ -153,8 +163,10 @@ class HotelBookingApp {
       room = getRoomByRoomNumber(roomNumber);
       roomCapacity = room.getRoomCapacity();
 
-      System.out.println("Please enter number of guests:");
-      numberOfGuests = scanner.nextLine();
+      do {
+        System.out.println("Please enter number of guests:");
+        numberOfGuests = scanner.nextLine();
+      } while (!checkValidIntegerInput(numberOfGuests));
 
       if (Integer.valueOf(numberOfGuests) > roomCapacity) {
         System.out.println("Guest count exceeds room capacity of: " + roomCapacity);
@@ -169,25 +181,25 @@ class HotelBookingApp {
       do {
         System.out.println("Please enter check-in month:");
         checkinMonth = scanner.nextLine();
-      } while (isInvalidMonth(checkinMonth));
+      } while (!checkValidIntegerInput(checkinMonth) || isInvalidMonth(checkinMonth));
 
       String checkinDate;
       do {
         System.out.println("Please enter check-in day:");
         checkinDate = scanner.nextLine();
-      } while (isInvalidDay(checkinDate));
+      } while (!checkValidIntegerInput(checkinDate) || isInvalidDay(checkinDate));
 
       String checkoutMonth;
       do {
         System.out.println("Please enter check-out month:");
         checkoutMonth = scanner.nextLine();
-      } while (isInvalidMonth(checkoutMonth));
+      } while (!checkValidIntegerInput(checkoutMonth) || isInvalidMonth(checkoutMonth));
 
       String checkoutDate;
       do {
         System.out.println("Please enter check-out day:");
         checkoutDate = scanner.nextLine();
-      } while (isInvalidDay(checkoutDate));
+      } while (!checkValidIntegerInput(checkoutDate) || isInvalidDay(checkoutDate));
 
       checkinDay = dateToDayNumber(Integer.valueOf(checkinMonth), Integer.valueOf(checkinDate));
       checkoutDay = dateToDayNumber(Integer.valueOf(checkoutMonth), Integer.valueOf(checkoutDate));
@@ -236,10 +248,11 @@ class HotelBookingApp {
   private void viewGuestBookings(){
     String guestId = checkGuestAvailability();
 
+    System.out.println("Guest " + guestId + " : " + getGuestByGuestId(guestId).getName());
+
     for(Booking booking: bookings){
       Guest guest = booking.getGuest();
       Room room = booking.getRoom();
-      System.out.println("Guest " + guestId + " : " + guest.getName());
       if(guestId.equals(Integer.toString(guest.getId()))){
         System.out.println("Booking : Room " + room.getRoomNumber() + ", " + booking.getNumberOfGuests() + " guest(s) from "
             + getCheckingDate(booking.getCheckinDay()) + " to " + getCheckoutDate(booking.getCheckoutDay()));
@@ -250,10 +263,11 @@ class HotelBookingApp {
 
   private void viewRoomBookings(){
     String roomNumber = checkRoomAvailability();
+    System.out.println("Room " + roomNumber + " bookings: ");
+
     for(Booking booking: bookings){
       Guest guest = booking.getGuest();
       Room room = booking.getRoom();
-      System.out.println("Room " + Integer.toString(room.getRoomNumber()) + " bookings: ");
       if(roomNumber.equals(Integer.toString(room.getRoomNumber()))){
         System.out.println("Guest " +guest.getId() + " – " + guest.getName() +", " + booking.getNumberOfGuests()
             + " guest(s) from " + getCheckingDate(booking.getCheckinDay()) + " to " +
@@ -411,6 +425,16 @@ class HotelBookingApp {
     int checkoutDate = dayNumberToDayOfMonth(checkoutDay);
 
     return String.valueOf(checkoutMonth)+"/"+ String.valueOf(checkoutDate);
+  }
+
+  private boolean checkValidIntegerInput(String input) {
+    try {
+      Integer.valueOf(input);
+    } catch (NumberFormatException ex) {
+      System.out.println("Invalid input, please enter a valid number");
+      return false;
+    }
+    return true;
   }
 
 }
